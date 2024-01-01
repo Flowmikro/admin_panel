@@ -1,0 +1,16 @@
+{% extends 'base_html/base.html' %}
+
+
+{% block content %}
+    <form action="/user/update/{{user.id}}" method="post">
+        <div class="mb-3">
+            <label>Username</label>
+            <input type = "text" name = "username" class="form-control" value="{{user.username}}"/>
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input type = "text" name = "email" class="form-control" value="{{user.email}}"/>
+        </div>
+        <input type = "submit" value = "Отправить" class="btn btn-primary mb-3"/>
+     </form>
+{% endblock content %}

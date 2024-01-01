@@ -1,0 +1,16 @@
+{% extends 'base_html/base.html' %}
+
+
+{% block content %}
+    <form action="/items/update/{{item.id}}" method="post">
+        <div class="mb-3">
+            <label>Item Name</label>
+            <input type = "text" name = "item_name" class="form-control" value="{{item.item_name}}"/>
+        </div>
+        <div class="mb-3">
+            <label>Description</label>
+            <input type = "text" name = "description" class="form-control" value="{{item.description}}"/>
+        </div>
+        <input type = "submit" value = "Отправить" class="btn btn-primary mb-3"/>
+     </form>
+{% endblock content %}

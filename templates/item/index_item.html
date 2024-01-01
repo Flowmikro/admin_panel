@@ -1,0 +1,26 @@
+{% extends 'base_html/base_index.html' %}
+
+{% block item %}
+    <a href="{{ url_for('create_item') }}" class="btn btn-primary">Добавить товар</a>
+{% endblock %}
+
+{% block thread %}
+<th>ID</th>
+<th>Item Name</th>
+<th>Description</th>
+{% endblock %}
+
+{% block for %}
+{% for item in items %}
+<tr>
+    <td>{{ item.id }}</td>
+    <td>{{ item.item_name }}</td>
+    <td>{{ item.description }}</td>
+    <td>
+        <a href="edit/{{ item.id }}" class="btn btn-success">Изменить</a> | <a href="delete/{{ item.id }}"
+                                                                               class="btn btn-danger">Удалить</a>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}
+

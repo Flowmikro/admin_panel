@@ -1,0 +1,28 @@
+{% extends 'base_html/base_index.html' %}
+
+
+{% block item %}
+    <a href="{{ url_for('register') }}" class="btn btn-primary">Добавить пользователя</a>
+{% endblock %}
+
+{% block thread %}
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Hashed Password</th>
+{% endblock %}
+
+{% block for %}
+{% for user in users %}
+<tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.hashed_password }}</td>
+    <td>
+        <a href="edit/{{ user.id }}" class="btn btn-success">Изменить</a> | <a href="delete/{{ user.id }}"
+                                                                               class="btn btn-danger">Удалить</a>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

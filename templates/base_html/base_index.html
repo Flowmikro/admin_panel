@@ -1,0 +1,28 @@
+{% extends 'base_html/base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <a href="/" class="btn btn-primary">Главная</a>
+        {% block item %}
+        {% endblock %}
+        <br><br>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    {% block thread %}
+                    {% endblock %}
+                </tr>
+            </thead>
+            <tbody>
+                {% block for %}
+
+                {% endblock %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
+
