@@ -1,4 +1,6 @@
+from fastapi import HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 
 async def get_records_from_db(model, order, session):
@@ -13,19 +15,25 @@ async def create_a_record_in_the_db(model, session, **kwargs):
     """
     Создает запись в бд
     """
-    db = model(**kwargs)
-    session.add(db)
-    await session.commit()
+    try:
+        db = model(**kwargs)
+        session.add(db)
+        await session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Проверьте поля')
 
 
 async def update_a_record_in_the_db(pk, model, session, **kwargs):
     """
     Обновить запись в бд
     """
-    db = await session.get(model, pk)
-    for attr, value in kwargs.items():
-        setattr(db, attr, value)
-    await session.commit()
+    try:
+        db = await session.get(model, pk)
+        for attr, value in kwargs.items():
+            setattr(db, attr, value)
+        await session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Проверьте поля')
 
 
 async def delete_a_record_in_the_db(pk, model, session):
