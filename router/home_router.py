@@ -9,7 +9,7 @@ home_router = APIRouter()
 
 @home_router.get('/', name="home")
 async def home_count(request: Request, db: AsyncSession = Depends(orm.get_session)):
-    result_user = (await db.execute(select(func.count(orm.UserAuth.id)))).scalar()
+    result_user = (await db.execute(select(func.count(orm.UserModel.id)))).scalar()
     result_item = (await db.execute(select(func.count(orm.ItemModel.id)))).scalar()
     return settings.templates.TemplateResponse("home.html",
                                                {"request": request, "result_user": result_user,
