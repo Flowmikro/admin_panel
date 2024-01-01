@@ -8,6 +8,7 @@
 <th>ID</th>
 <th>Item Name</th>
 <th>Description</th>
+<th>User ID</th>
 {% endblock %}
 
 {% block for %}
@@ -16,6 +17,7 @@
     <td>{{ item.id }}</td>
     <td>{{ item.item_name }}</td>
     <td>{{ item.description }}</td>
+    <td>{{ item.user_id }}</td>
     <td>
         <a href="edit/{{ item.id }}" class="btn btn-success">Изменить</a> | <a href="delete/{{ item.id }}"
                                                                                class="btn btn-danger">Удалить</a>
