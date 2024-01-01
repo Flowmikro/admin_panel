@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request, Depends, Form, status
-from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import RedirectResponse
