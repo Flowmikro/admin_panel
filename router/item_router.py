@@ -20,9 +20,10 @@ async def home(request: Request,
 
 @item_router.post("/add")
 async def add(request: Request, item_name: str = Form(...), description: str = Form(...),
+              user_id: int = Form(...),
               session: AsyncSession = Depends(orm.get_session)):
     await crud.create_a_record_in_the_db(model=orm.ItemModel, session=session, item_name=item_name,
-                                         description=description)
+                                         description=description, user_id=int(user_id))
     return RedirectResponse(url=item_router.url_path_for("items"), status_code=status.HTTP_303_SEE_OTHER)
 
 
@@ -39,9 +40,10 @@ async def edit(request: Request, item_id: int, db: AsyncSession = Depends(orm.ge
 
 @item_router.post("/update/{item_id}")
 async def update(request: Request, item_id: int, item_name: str = Form(...), description: str = Form(...),
+                 user_id: int = Form(...),
                  session: AsyncSession = Depends(orm.get_session)):
     await crud.update_a_record_in_the_db(pk=item_id, model=orm.ItemModel, session=session, item_name=item_name,
-                                         description=description)
+                                         description=description, user_id=int(user_id))
     return RedirectResponse(url=item_router.url_path_for("items"), status_code=status.HTTP_303_SEE_OTHER)
 
 

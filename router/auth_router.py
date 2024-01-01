@@ -30,7 +30,7 @@ async def register(request: Request, db: AsyncSession = Depends(orm.get_session)
         try:
             await create_new_user(user=user, db=db)
             return responses.RedirectResponse(
-                "/user", status_code=status.HTTP_302_FOUND
+                "/user/", status_code=status.HTTP_302_FOUND
             )
         except IntegrityError:
             form.__dict__.get("errors").append("Имя пользователя или адрес электронной почты заняты")
