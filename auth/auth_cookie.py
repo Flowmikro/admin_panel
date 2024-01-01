@@ -5,6 +5,9 @@ from fastapi.security.utils import get_authorization_scheme_param
 
 
 class OAuth2PasswordBearerWithCookie(OAuth2):
+    """
+    Реализация OAuth2
+    """
     def __init__(
             self,
             tokenUrl: str,

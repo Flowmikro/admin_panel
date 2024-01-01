@@ -12,6 +12,9 @@ from services import crud
 
 
 async def create_new_user(user: UserCreateSchema, session: AsyncSession = Depends(orm.get_session)):
+    """
+    Создание пользователя
+    """
     await crud.create_a_record_in_the_db(
         model=orm.UserModel, session=session, username=user.username, email=user.email, hashed_password=Hasher.get_password_hash(user.password)
     )
@@ -19,6 +22,9 @@ async def create_new_user(user: UserCreateSchema, session: AsyncSession = Depend
 
 
 async def get_user(username: str, session: AsyncSession = Depends(orm.get_session)):
+    """
+    Получить пользователя
+    """
     result = await session.execute(select(orm.UserModel).where(orm.UserModel.email == username))
     result = result.scalars().all()
     if result:
@@ -27,6 +33,9 @@ async def get_user(username: str, session: AsyncSession = Depends(orm.get_sessio
 
 
 async def create_access_token(data: dict, expires_delta: timedelta | None):
+    """
+    Создание токена
+    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta

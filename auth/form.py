@@ -2,6 +2,9 @@ from fastapi import Request
 
 
 class LoginForm:
+    """
+    Реализация проверки почты и пароля
+    """
     def __init__(self, request: Request):
         self.request: Request = request
         self.errors: list = []
@@ -26,6 +29,9 @@ class LoginForm:
 
 
 class UserCreateForm:
+    """
+    Реализация проверки почты, пароля и имени лля создания пользователя
+    """
     def __init__(self, request: Request):
         self.request: Request = request
         self.errors: list = []
