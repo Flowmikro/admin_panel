@@ -8,16 +8,13 @@ import orm
 from auth.hasher import Hasher
 from auth.schemas import UserCreateSchema
 from app.settings import settings
+from services import crud
 
 
 async def create_new_user(user: UserCreateSchema, session: AsyncSession = Depends(orm.get_session)):
-    user = orm.UserModel(
-        username=user.username,
-        email=user.email,
-        hashed_password=Hasher.get_password_hash(user.password),
+    await crud.create_a_record_in_the_db(
+        model=orm.UserModel, session=session, username=user.username, email=user.email, hashed_password=Hasher.get_password_hash(user.password)
     )
-    session.add(user)
-    await session.commit()
     return user
 
 
