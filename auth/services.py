@@ -10,19 +10,19 @@ from auth.schemas import UserCreateSchema
 from app.settings import settings
 
 
-async def create_new_user(user: UserCreateSchema, db: AsyncSession = Depends(orm.get_session)):
+async def create_new_user(user: UserCreateSchema, session: AsyncSession = Depends(orm.get_session)):
     user = orm.UserModel(
         username=user.username,
         email=user.email,
         hashed_password=Hasher.get_password_hash(user.password),
     )
-    db.add(user)
-    await db.commit()
+    session.add(user)
+    await session.commit()
     return user
 
 
-async def get_user(username: str, db: AsyncSession = Depends(orm.get_session)):
-    result = await db.execute(select(orm.UserModel).where(orm.UserModel.email == username))
+async def get_user(username: str, session: AsyncSession = Depends(orm.get_session)):
+    result = await session.execute(select(orm.UserModel).where(orm.UserModel.email == username))
     result = result.scalars().all()
     if result:
         return result[0]

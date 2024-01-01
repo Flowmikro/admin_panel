@@ -1,11 +1,11 @@
 from sqlalchemy import select
 
 
-async def get_records_from_db(model, session):
+async def get_records_from_db(model, order, session):
     """
     Выводит записи из бд
     """
-    result = await session.execute(select(model).order_by(model.id))
+    result = await session.execute(select(model).order_by(order))
     return result.scalars().all()
 
 

@@ -14,13 +14,13 @@ from auth.utils import authenticate_user
 auth_router = APIRouter()
 
 
-@auth_router.get("/register", name='register')
+@auth_router.get("/new_user", name='new_user')
 def register(request: Request):
     return settings.templates.TemplateResponse("auth/register.html", {"request": request})
 
 
-@auth_router.post("/register")
-async def register(request: Request, db: AsyncSession = Depends(orm.get_session)):
+@auth_router.post("/new_user")
+async def register(request: Request, session: AsyncSession = Depends(orm.get_session)):
     form = UserCreateForm(request)
     await form.load_data()
     if await form.is_valid():
@@ -28,7 +28,7 @@ async def register(request: Request, db: AsyncSession = Depends(orm.get_session)
             username=form.username, email=form.email, password=form.password
         )
         try:
-            await create_new_user(user=user, db=db)
+            await create_new_user(user=user, session=session)
             return responses.RedirectResponse(
                 "/user/", status_code=status.HTTP_302_FOUND
             )
@@ -40,8 +40,8 @@ async def register(request: Request, db: AsyncSession = Depends(orm.get_session)
 
 @auth_router.post("/token", response_model=Token)
 async def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends(),
-                                 db: AsyncSession = Depends(orm.get_session)):
-    user = await authenticate_user(form_data.username, form_data.password, db)
+                                 session: AsyncSession = Depends(orm.get_session)):
+    user = await authenticate_user(form_data.username, form_data.password, session)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -62,14 +62,13 @@ def login(request: Request):
 
 
 @auth_router.post("/login")
-async def login(request: Request,
-                db: AsyncSession = Depends(orm.get_session)):
+async def login(request: Request, session: AsyncSession = Depends(orm.get_session)):
     form = LoginForm(request)
     await form.load_data()
     if await form.is_valid():
         try:
             response = settings.templates.TemplateResponse("auth/login.html", form.__dict__)
-            await login_for_access_token(response=response, form_data=form, db=db)
+            await login_for_access_token(response=response, form_data=form, session=session)
             return responses.RedirectResponse(
                 "/user", status_code=status.HTTP_302_FOUND
             )

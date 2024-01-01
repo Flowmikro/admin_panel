@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request, Depends, Form, status
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import RedirectResponse
 from app.settings import settings
@@ -11,19 +10,22 @@ item_router = APIRouter(prefix='/items')
 
 
 @item_router.get("/", name='items')
-async def home(request: Request,
-               db: AsyncSession = Depends(orm.get_session)):
-    users = await db.execute(select(orm.ItemModel).order_by(orm.ItemModel.id))
-    items = users.scalars().all()
+async def home(request: Request, session: AsyncSession = Depends(orm.get_session)):
+    items = await crud.get_records_from_db(model=orm.ItemModel, order=orm.ItemModel.user_id, session=session)
     return settings.templates.TemplateResponse("item/index_item.html", {"request": request, "items": items})
 
 
 @item_router.post("/add")
-async def add(request: Request, item_name: str = Form(...), description: str = Form(...),
-              user_id: int = Form(...),
-              session: AsyncSession = Depends(orm.get_session)):
-    await crud.create_a_record_in_the_db(model=orm.ItemModel, session=session, item_name=item_name,
-                                         description=description, user_id=int(user_id))
+async def add(
+        request: Request,
+        item_name: str = Form(...),
+        description: str = Form(...),
+        user_id: int = Form(...),
+        session: AsyncSession = Depends(orm.get_session)
+):
+    await crud.create_a_record_in_the_db(
+        model=orm.ItemModel, item_name=item_name, description=description, user_id=int(user_id), session=session
+    )
     return RedirectResponse(url=item_router.url_path_for("items"), status_code=status.HTTP_303_SEE_OTHER)
 
 
@@ -33,17 +35,28 @@ async def addnew(request: Request):
 
 
 @item_router.get("/edit/{item_id}")
-async def edit(request: Request, item_id: int, db: AsyncSession = Depends(orm.get_session)):
-    item = await db.get(orm.ItemModel, item_id)
+async def edit(
+        request: Request,
+        item_id: int,
+        session: AsyncSession = Depends(orm.get_session)
+):
+    item = await session.get(orm.ItemModel, item_id)
     return settings.templates.TemplateResponse("item/update_item.html", {"request": request, "item": item})
 
 
 @item_router.post("/update/{item_id}")
-async def update(request: Request, item_id: int, item_name: str = Form(...), description: str = Form(...),
-                 user_id: int = Form(...),
-                 session: AsyncSession = Depends(orm.get_session)):
-    await crud.update_a_record_in_the_db(pk=item_id, model=orm.ItemModel, session=session, item_name=item_name,
-                                         description=description, user_id=int(user_id))
+async def update(
+        request: Request,
+        item_id: int,
+        item_name: str = Form(...),
+        description: str = Form(...),
+        user_id: int = Form(...),
+        session: AsyncSession = Depends(orm.get_session)
+):
+    await crud.update_a_record_in_the_db(
+        pk=item_id, model=orm.ItemModel, session=session, item_name=item_name, description=description,
+        user_id=int(user_id)
+    )
     return RedirectResponse(url=item_router.url_path_for("items"), status_code=status.HTTP_303_SEE_OTHER)
 
 
