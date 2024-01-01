@@ -47,7 +47,7 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверное имя пользователя или пароль",
         )
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_MINUTES)
     access_token = await create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
