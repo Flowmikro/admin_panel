@@ -11,7 +11,7 @@ class UserModel(Base):
     username: Mapped[str] = mapped_column(String(30), unique=True)
     email: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(nullable=False)
-    item_children: Mapped[list["ItemModel"]] = relationship(back_populates="user_parent")
+    item_children: Mapped[list["ItemModel"]] = relationship(cascade='save-update, merge, delete', back_populates="user_parent")
 
 
 class ItemModel(Base):
