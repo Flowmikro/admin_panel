@@ -24,7 +24,7 @@ async def edit(request: Request, user_id: int, db: AsyncSession = Depends(orm.ge
     """
     Берем одну запись с UserModel, для того чтобы на основе этого выполнять update
     """
-    user = await db.get(orm.UserModel, user_id)
+    user = await crud.get_one_item_in_db(pk=user_id, model=orm.UserModel, session=session)
     return settings.templates.TemplateResponse("user/update_user.html", {"request": request, "user": user})
 
 

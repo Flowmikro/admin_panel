@@ -46,7 +46,7 @@ async def edit(
     """
     Берем одну запись с ItemModel, для того чтобы на основе этого выполнять update
     """
-    item = await session.get(orm.ItemModel, item_id)
+    item = await crud.get_one_item_in_db(pk=item_id, model=orm.ItemModel, session=session)
     return settings.templates.TemplateResponse("item/update_item.html", {"request": request, "item": item})
 
 

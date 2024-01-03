@@ -11,6 +11,15 @@ async def get_records_from_db(model, order, session):
     return result.scalars().all()
 
 
+
+async def get_one_item_in_db(pk, model, session):
+    """
+    Выводит одну запись из бд
+    """
+    resuit = await session.get(model, pk)
+    return resuit
+
+
 async def create_a_record_in_the_db(model, session, **kwargs):
     """
     Создает запись в бд
