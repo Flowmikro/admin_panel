@@ -20,11 +20,11 @@ async def home(request: Request, session: AsyncSession = Depends(orm.get_session
 
 
 @user_router.get("/edit/{user_id}")
-async def edit(request: Request, user_id: int, db: AsyncSession = Depends(orm.get_session)):
+async def edit(request: Request, user_id: int, session: AsyncSession = Depends(orm.get_session)):
     """
     Берем одну запись с UserModel, для того чтобы на основе этого выполнять update
     """
-    user = await crud.get_one_item_in_db(pk=user_id, model=orm.UserModel, session=session)
+    user = await crud.get_one_record_in_db(pk=user_id, model=orm.UserModel, session=session)
     return settings.templates.TemplateResponse("user/update_user.html", {"request": request, "user": user})
 
 
