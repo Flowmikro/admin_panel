@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-
+sdfds = 'fsdf'
 
 async def get_records_from_db(model, order, session):
     """
