@@ -51,3 +51,5 @@ async def delete_a_record_in_the_db(pk, model, session):
     db = await session.get(model, pk)
     await session.delete(db)
     await session.commit()
+
+f = []
